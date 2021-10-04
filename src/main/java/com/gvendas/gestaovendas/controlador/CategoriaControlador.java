@@ -46,7 +46,7 @@ public class CategoriaControlador {
 			ResponseEntity.notFound().build();
 	}
 	
-	@ApiOperation(value = "Salvar", nickname = "salvar")
+	@ApiOperation(value = "Salvar", nickname = "salvarCategoria")
 	@PostMapping
 	public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria){
 		Categoria categoriaSalva = categoriaService.salvar(categoria);
