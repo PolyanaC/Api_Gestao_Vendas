@@ -28,7 +28,7 @@ public class Produto {
 	@Column(name = "quantidade")
 	private Integer quantidade;
 	
-	@Column(name = "preco_custo")
+	@Column(name = "preco_curto")
 	private BigDecimal precoCusto;
 	
 	@Column(name = "preco_venda")
