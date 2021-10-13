@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GestaoVendasTratamentoExcecao extends ResponseEntityExceptionHandler {
 
 	private static final String CONSTANT_VALIDATION_NOT_BLANK = "NotBlank";
+	private static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
 	private static final String CONSTANT_VALIDATION_LENGTH = "Length";
 
 	@Override
@@ -38,6 +41,24 @@ public class GestaoVendasTratamentoExcecao extends ResponseEntityExceptionHandle
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 
+	}
+	//Tratando erro de integridade de banco de dados
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+			WebRequest request){
+		String msgUsuario = "Recurso não encontrado";
+		String msgDesenvolvedor = ex.toString();
+		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	//Meu tratamento para erro de integridade de banco de dados
+	@ExceptionHandler(JpaObjectRetrievalFailureException.class)
+	public ResponseEntity<Object> handleJpaObjectRetrievalFailureException(JpaObjectRetrievalFailureException ex,
+			WebRequest request){
+		String msgUsuario = "Recurso não encontrado";
+		String msgDesenvolvedor = ex.toString();
+		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 	
 	//Erro de categoria duplicada
@@ -65,6 +86,10 @@ public class GestaoVendasTratamentoExcecao extends ResponseEntityExceptionHandle
 	private String tratarMensagemDeErroParaUsuario(FieldError fieldError) {
 		if (fieldError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)) {
 			return fieldError.getDefaultMessage().concat(" é obrigatório.");
+		}
+		
+		if(fieldError.getCode().equals(CONSTANT_VALIDATION_NOT_NULL)) {
+			return fieldError.getDefaultMessage().concat(" é obrigatório");
 		}
 
 		if (fieldError.getCode().equals(CONSTANT_VALIDATION_LENGTH)) {
