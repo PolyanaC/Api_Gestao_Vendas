@@ -42,6 +42,11 @@ public class ProdutoService {
 		BeanUtils.copyProperties(produto, produtoSalvar, "codigo");
 		return produtoRepository.save(produtoSalvar);
 	}
+	
+	public void deletar(Long codigoCategoria, Long codigoProduto) {
+		Produto produto = validarProdutoExiste(codigoProduto, codigoCategoria);
+		produtoRepository.delete(produto);
+	}
 
 	private Produto validarProdutoExiste(Long codigoProduto, Long codigoCategoria) {
 		Optional<Produto> produto = buscarPorCodigo(codigoProduto, codigoCategoria);
