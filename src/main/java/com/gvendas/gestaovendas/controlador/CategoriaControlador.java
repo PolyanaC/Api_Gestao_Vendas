@@ -53,13 +53,13 @@ public class CategoriaControlador {
 		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
 	}
 	
-	@ApiOperation(value = "Atualizar", nickname = "atualizar")
+	@ApiOperation(value = "Atualizar", nickname = "atualizarCategoria")
 	@PutMapping("/{codigo}")
 	public ResponseEntity<Categoria> atualizar(@PathVariable Long codigo, @Valid @RequestBody Categoria categoria){
 		return ResponseEntity.ok(categoriaService.atualizar(codigo, categoria));
 	}
 	
-	@ApiOperation(value = "Deletar", nickname = "delete")
+	@ApiOperation(value = "Deletar", nickname = "deleteCategoria")
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long codigo) {

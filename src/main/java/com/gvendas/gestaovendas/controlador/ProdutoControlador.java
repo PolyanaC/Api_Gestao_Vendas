@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,12 +44,20 @@ public class ProdutoControlador {
 		return produto.isPresent() ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build();
 
 	}
-	
+
 	@ApiOperation(value = "Salvar", nickname = "salvaProduto")
 	@PostMapping
-	public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto){
+	public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto) {
 		Produto produtoSalvo = produtoService.salvar(produto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
+	}
+
+	@ApiOperation(value = "Atualizar", nickname = "atualizarProduto")
+	@PutMapping("/{codigoProduto}")
+	public ResponseEntity<Produto> atualizar(@PathVariable Long codigoCategoria, @PathVariable Long codigoProduto,
+			@Valid @RequestBody Produto produto) {
+		Produto produtoAtualizado = produtoService.atualizar(codigoCategoria, codigoProduto, produto);
+		return ResponseEntity.ok(produtoAtualizado);
 	}
 
 }

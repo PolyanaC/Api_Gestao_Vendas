@@ -48,6 +48,7 @@ public class Produto {
 	@Length(max = 500, message = "Observação")
 	private String observacao;
 	
+	@NotNull(message = "Codigo categoria")
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria", 
 	referencedColumnName = "codigo")
