@@ -11,48 +11,58 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
-
-
 
 @Entity
 @Table(name = "produto")
 public class Produto {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "codigo")
 	private Long codigo;
-	
+
 	@Column(name = "descricao")
-	@NotBlank(message = "Descrição")
-	@Length(min = 3, max = 100, message = "Descrição")
 	private String descricao;
-	
+
 	@Column(name = "quantidade")
-	@NotNull(message = "Quantidade")
 	private Integer quantidade;
-	
+
 	@Column(name = "preco_curto")
-	@NotNull(message = "Preço custo")
 	private BigDecimal precoCusto;
-	
+
 	@Column(name = "preco_venda")
-	@NotNull(message = "Preço venda")
 	private BigDecimal preco_venda;
-	
+
 	@Column(name = "observacao")
-	@Length(max = 500, message = "Observação")
 	private String observacao;
-	
-	@NotNull(message = "Codigo categoria")
+
 	@ManyToOne
-	@JoinColumn(name = "codigo_categoria", 
-	referencedColumnName = "codigo")
+	@JoinColumn(name = "codigo_categoria", referencedColumnName = "codigo")
 	private Categoria categoria;
+
+	public Produto() {
+	}
+
+	public Produto(Long codigo, String descricao, Integer quantidade, BigDecimal precoCusto, BigDecimal preco_venda,
+			String observacao, Categoria categoria) {
+		this.codigo = codigo;
+		this.descricao = descricao;
+		this.quantidade = quantidade;
+		this.precoCusto = precoCusto;
+		this.preco_venda = preco_venda;
+		this.observacao = observacao;
+		this.categoria = categoria;
+	}
+
+	public Produto(String descricao, Integer quantidade, BigDecimal precoCusto, BigDecimal preco_venda,
+			String observacao, Categoria categoria) {
+		this.descricao = descricao;
+		this.quantidade = quantidade;
+		this.precoCusto = precoCusto;
+		this.preco_venda = preco_venda;
+		this.observacao = observacao;
+		this.categoria = categoria;
+	}
 
 	public Long getCodigo() {
 		return codigo;
@@ -130,5 +140,4 @@ public class Produto {
 				&& Objects.equals(quantidade, other.quantidade);
 	}
 
-	
 }
